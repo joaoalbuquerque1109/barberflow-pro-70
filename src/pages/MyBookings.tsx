@@ -137,7 +137,7 @@ const MyBookings = () => {
       </Helmet>
 
       <div className="min-h-screen flex flex-col bg-background">
-        <Navbar userRole="CLIENT" />
+        <Navbar />
         
         <main className="flex-1 py-8">
           <div className="container-custom max-w-3xl">

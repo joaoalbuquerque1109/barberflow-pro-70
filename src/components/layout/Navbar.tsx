@@ -1,53 +1,28 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Scissors, User, Calendar, LayoutDashboard, LogOut } from 'lucide-react';
+import { Menu, Scissors, User, Calendar, LayoutDashboard, LogOut, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
-interface NavbarProps {
-  userRole?: 'CLIENT' | 'BARBER' | 'MANAGER' | null;
-  onLogout?: () => void;
-}
-
-const Navbar = ({ userRole, onLogout }: NavbarProps) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut, loading } = useAuth();
 
   const publicLinks = [
     { href: '/', label: 'Home' },
+    { href: '/explore', label: 'Explorar', icon: MapPin },
     { href: '/services', label: 'Serviços' },
     { href: '/barbers', label: 'Barbeiros' },
   ];
 
-  const clientLinks = [
-    { href: '/booking', label: 'Agendar', icon: Calendar },
-    { href: '/my-bookings', label: 'Meus Agendamentos', icon: Calendar },
-    { href: '/profile', label: 'Perfil', icon: User },
-  ];
-
-  const barberLinks = [
-    { href: '/barber/schedule', label: 'Agenda', icon: Calendar },
-    { href: '/barber/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  ];
-
-  const managerLinks = [
-    { href: '/manager/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/manager/team', label: 'Equipe', icon: User },
-    { href: '/manager/reports', label: 'Relatórios', icon: LayoutDashboard },
-  ];
-
-  const getRoleLinks = () => {
-    switch (userRole) {
-      case 'CLIENT':
-        return clientLinks;
-      case 'BARBER':
-        return barberLinks;
-      case 'MANAGER':
-        return managerLinks;
-      default:
-        return [];
-    }
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+    setIsOpen(false);
   };
 
   const NavLinks = ({ mobile = false }: { mobile?: boolean }) => (
@@ -58,26 +33,12 @@ const Navbar = ({ userRole, onLogout }: NavbarProps) => {
           to={link.href}
           onClick={() => mobile && setIsOpen(false)}
           className={cn(
-            'text-sm font-medium transition-colors hover:text-primary',
-            location.pathname === link.href ? 'text-primary' : 'text-muted-foreground',
-            mobile && 'block py-2'
-          )}
-        >
-          {link.label}
-        </Link>
-      ))}
-      {userRole && getRoleLinks().map((link) => (
-        <Link
-          key={link.href}
-          to={link.href}
-          onClick={() => mobile && setIsOpen(false)}
-          className={cn(
-            'text-sm font-medium transition-colors hover:text-primary flex items-center gap-2',
+            'text-sm font-medium transition-colors hover:text-primary flex items-center gap-1.5',
             location.pathname === link.href ? 'text-primary' : 'text-muted-foreground',
             mobile && 'py-2'
           )}
         >
-          <link.icon className="h-4 w-4" />
+          {link.icon && <link.icon className="h-4 w-4" />}
           {link.label}
         </Link>
       ))}
@@ -91,7 +52,7 @@ const Navbar = ({ userRole, onLogout }: NavbarProps) => {
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gold-gradient">
             <Scissors className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="font-display text-xl font-bold">Barber Flow</span>
+          <span className="font-display text-xl font-bold">Barber Master</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -100,20 +61,31 @@ const Navbar = ({ userRole, onLogout }: NavbarProps) => {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          {userRole ? (
+          {loading ? (
+            <div className="h-9 w-20 bg-muted animate-pulse rounded-md" />
+          ) : user ? (
             <>
-              <Button variant="ghost" size="sm" onClick={onLogout}>
+              <Link to="/my-bookings">
+                <Button variant="ghost" size="sm">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Agendamentos
+                </Button>
+              </Link>
+              <Button variant="ghost" size="sm" onClick={handleLogout}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Sair
               </Button>
             </>
           ) : (
             <>
-              <Link to="/login">
+              <Link to="/auth">
                 <Button variant="ghost" size="sm">Entrar</Button>
               </Link>
-              <Link to="/booking">
-                <Button variant="gold" size="sm">Agendar Agora</Button>
+              <Link to="/explore">
+                <Button variant="gold" size="sm">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  Encontrar Barbeiro
+                </Button>
               </Link>
             </>
           )}
@@ -130,18 +102,29 @@ const Navbar = ({ userRole, onLogout }: NavbarProps) => {
             <div className="flex flex-col gap-6 mt-8">
               <NavLinks mobile />
               <div className="border-t border-border pt-4 space-y-2">
-                {userRole ? (
-                  <Button variant="outline" className="w-full" onClick={() => { onLogout?.(); setIsOpen(false); }}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Sair
-                  </Button>
+                {user ? (
+                  <>
+                    <Link to="/my-bookings" onClick={() => setIsOpen(false)}>
+                      <Button variant="outline" className="w-full justify-start">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        Meus Agendamentos
+                      </Button>
+                    </Link>
+                    <Button variant="outline" className="w-full justify-start" onClick={handleLogout}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sair
+                    </Button>
+                  </>
                 ) : (
                   <>
-                    <Link to="/login" onClick={() => setIsOpen(false)}>
+                    <Link to="/auth" onClick={() => setIsOpen(false)}>
                       <Button variant="outline" className="w-full">Entrar</Button>
                     </Link>
-                    <Link to="/booking" onClick={() => setIsOpen(false)}>
-                      <Button variant="gold" className="w-full">Agendar Agora</Button>
+                    <Link to="/explore" onClick={() => setIsOpen(false)}>
+                      <Button variant="gold" className="w-full">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        Encontrar Barbeiro
+                      </Button>
                     </Link>
                   </>
                 )}
