@@ -67,7 +67,7 @@ const ManagerDashboard = () => {
       </Helmet>
 
       <div className="min-h-screen bg-background">
-        <Navbar userRole="MANAGER" />
+        <Navbar />
         
         <main className="container-custom py-8">
           {/* Header */}

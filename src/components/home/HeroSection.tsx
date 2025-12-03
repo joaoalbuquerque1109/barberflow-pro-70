@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Calendar, Star, Clock, Award } from 'lucide-react';
+import { MapPin, Star, Clock, Award } from 'lucide-react';
 
 const HeroSection = () => {
   return (
@@ -18,30 +18,30 @@ const HeroSection = () => {
           <div className="space-y-8 animate-slide-up">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <Award className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">A Barbearia #1 da Cidade</span>
+              <span className="text-sm font-medium text-primary">Marketplace de Barbeiros #1</span>
             </div>
             
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-              Estilo e
-              <span className="block gold-text">Tradição</span>
-              em Cada Corte
+              Encontre o
+              <span className="block gold-text">Barbeiro Perfeito</span>
+              Perto de Você
             </h1>
             
             <p className="text-lg text-muted-foreground max-w-lg">
-              Experimente o melhor em cuidados masculinos. Nossos barbeiros especializados 
-              combinam técnicas tradicionais com tendências modernas para criar seu visual perfeito.
+              Descubra barbearias e barbeiros autônomos na sua região. 
+              Agende online, compare avaliações e encontre o profissional ideal para seu estilo.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/booking">
+              <Link to="/explore">
                 <Button variant="gold" size="xl" className="w-full sm:w-auto">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Agendar Agora
+                  <MapPin className="mr-2 h-5 w-5" />
+                  Explorar Próximos
                 </Button>
               </Link>
-              <Link to="/services">
+              <Link to="/register-business">
                 <Button variant="outline" size="xl" className="w-full sm:w-auto">
-                  Ver Serviços
+                  Sou Barbeiro
                 </Button>
               </Link>
             </div>
@@ -53,15 +53,15 @@ const HeroSection = () => {
                   <Star className="h-4 w-4 fill-primary" />
                   <span className="font-display text-2xl font-bold">4.9</span>
                 </div>
-                <p className="text-sm text-muted-foreground">Avaliação</p>
+                <p className="text-sm text-muted-foreground">Avaliação Média</p>
               </div>
               <div>
-                <div className="font-display text-2xl font-bold text-foreground">5k+</div>
-                <p className="text-sm text-muted-foreground">Clientes</p>
+                <div className="font-display text-2xl font-bold text-foreground">500+</div>
+                <p className="text-sm text-muted-foreground">Profissionais</p>
               </div>
               <div>
-                <div className="font-display text-2xl font-bold text-foreground">8+</div>
-                <p className="text-sm text-muted-foreground">Anos</p>
+                <div className="font-display text-2xl font-bold text-foreground">50k+</div>
+                <p className="text-sm text-muted-foreground">Agendamentos</p>
               </div>
             </div>
           </div>
