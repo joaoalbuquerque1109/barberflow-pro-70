@@ -221,16 +221,11 @@ const RegisterBusiness = () => {
         .update({ tenant_id: tenant.id })
         .eq('id', currentUser.id);
 
-      // Add manager role for this tenant
-      await supabase
-        .from('user_roles')
-        .insert({
-          user_id: currentUser.id,
-          tenant_id: tenant.id,
-          role: 'manager',
-        });
+      // Note: Manager role is automatically assigned by database trigger (assign_tenant_roles_trigger)
+      // No manual role insertion needed - this prevents privilege escalation vulnerabilities
 
       // If independent barber, also create barber profile
+      // Note: Barber role is automatically assigned by database trigger (assign_barber_role_trigger)
       if (tenantType === 'independent') {
         await supabase
           .from('barbers')
@@ -239,15 +234,6 @@ const RegisterBusiness = () => {
             tenant_id: tenant.id,
             display_name: businessName,
             bio: businessDescription || null,
-          });
-
-        // Add barber role
-        await supabase
-          .from('user_roles')
-          .insert({
-            user_id: currentUser.id,
-            tenant_id: tenant.id,
-            role: 'barber',
           });
       }
 
