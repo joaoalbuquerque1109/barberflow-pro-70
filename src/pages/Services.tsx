@@ -9,14 +9,32 @@ import { mockServices } from '@/data/mockData';
 import { Clock, ArrowRight, Scissors } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const categories = ['Todos', 'Haircuts', 'Beard', 'Shave', 'Combos'];
+const categoryDisplay: Record<string, string> = {
+  Todos: 'Todos',
+  'Cortes de cabelo': 'Cortes',
+  Barba: 'Barba',
+  Depilar: 'Barbear',
+  Combos: 'Combos',
+};
+
+const categories = Object.keys(categoryDisplay);
+
+const categoryAliases: Record<string, string[]> = {
+  'Cortes de cabelo': ['Cortes de cabelo', 'Haircuts'],
+  Barba: ['Barba', 'Beard'],
+  Depilar: ['Depilar', 'Shave'],
+  Combos: ['Combos'],
+};
 
 const Services = () => {
   const [activeCategory, setActiveCategory] = useState('Todos');
 
-  const filteredServices = activeCategory === 'Todos' 
-    ? mockServices 
-    : mockServices.filter(s => s.category === activeCategory);
+  const filteredServices = activeCategory === 'Todos'
+    ? mockServices
+    : mockServices.filter(s => {
+        const aliases = categoryAliases[activeCategory] ?? [activeCategory];
+        return aliases.includes(s.category);
+      });
 
   return (
     <>
@@ -57,10 +75,7 @@ const Services = () => {
                     size="sm"
                     onClick={() => setActiveCategory(category)}
                   >
-                    {category === 'Todos' ? 'Todos' : 
-                     category === 'Haircuts' ? 'Cortes' :
-                     category === 'Beard' ? 'Barba' :
-                     category === 'Shave' ? 'Barbear' : 'Combos'}
+                    {categoryDisplay[category] ?? category} 
                   </Button>
                 ))}
               </div>
@@ -83,9 +98,7 @@ const Services = () => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary">
-                            {service.category === 'Haircuts' ? 'Cortes' :
-                             service.category === 'Beard' ? 'Barba' :
-                             service.category === 'Shave' ? 'Barbear' : 'Combos'}
+                            {categoryDisplay[service.category] ?? service.category}
                           </span>
                           <div className="flex items-center gap-1 text-sm text-muted-foreground">
                             <Clock className="h-4 w-4" />
