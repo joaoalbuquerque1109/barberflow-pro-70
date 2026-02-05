@@ -46,7 +46,7 @@ export const mockServices: Service[] = [
     description: 'Corte de cabelo tradicional com tesoura e máquina de cortar cabelo, incluindo lavagem e modelagem.',
     price: 45,
     duration: 30,
-    category: 'Cortes de cabelo',
+    category: 'Haircuts',
   },
   {
     id: '2',
@@ -54,7 +54,7 @@ export const mockServices: Service[] = [
     description: 'Corte moderno com efeito degradê, com transição suave da cor da pele até os comprimentos mais longos.',
     price: 55,
     duration: 45,
-    category: 'Cortes de cabelo',
+    category: 'Haircuts',
   },
   {
     id: '3',

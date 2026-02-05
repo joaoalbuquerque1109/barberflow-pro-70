@@ -58,8 +58,8 @@ const Services = () => {
                     onClick={() => setActiveCategory(category)}
                   >
                     {category === 'Todos' ? 'Todos' : 
-                     category === 'Haircuts' ? 'Cortes' :
-                     category === 'Beard' ? 'Barba' :
+                     category === 'Cortes de cabelo' ? 'Cortes' :
+                     category === 'Barba' ? 'Barba' :
                      category === 'Shave' ? 'Barbear' : 'Combos'}
                   </Button>
                 ))}
